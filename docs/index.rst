@@ -6,7 +6,8 @@
 ICRmax
 ==================================
 
-.. Contents:
+..
+    .. Contents::
 
 .. toctree::
    :maxdepth: 2
@@ -18,6 +19,7 @@ ICRmax
 .. * :ref:`modindex`
 .. * :ref:`search`
 
+.. _what
 What is ICRmax?
 ==================================
 ICRmax is a computational pipeline designed for the cost-effective identification of a minimal set of tumor-specific interchromosomal rearrangements (ICRs) for clinical application. 
