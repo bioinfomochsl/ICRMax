@@ -11,6 +11,7 @@ ICRmax
 
 .. toctree::
    :maxdepth: 2
+   what
 
 .. Indices and tables
 .. ==================
