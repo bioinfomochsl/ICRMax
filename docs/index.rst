@@ -74,11 +74,11 @@ Mate-pair or paired-end reads resulting from whole genome sequencing must be ali
 
 Alignment to alternative reference assemblies is also advised since differences in assembly can give rise to mate-pair reads mapped in different chromosomes according to one assembly but not another. Some alternative assemblies that can be used for mapping are:
 
-<b>HuRef</b> (J. Craig Venter Institute) [Levy et. al 2007]
+**HuRef** (J. Craig Venter Institute) [Levy et. al 2007]
 
-<b>GRCh37_alt</b> (Partial reference genome with alternative representations – Genome Reference Consortium)
+**GRCh37_alt** (Partial reference genome with alternative representations – Genome Reference Consortium)
 
-<b>CRA</b> (Human chr7 complete sequence – The Center for Applied Genomics) [Scherer et al. 2003]
+**CRA** (Human chr7 complete sequence – The Center for Applied Genomics) [Scherer et al. 2003]
 
 Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have already mapped to the same chromosome.
 
@@ -111,12 +111,12 @@ Removing recurrent events
 ==================================
 The final clusters of mate-pair reads can be merged at this stage so that each event has two coordinates, one in each chromosome.
 
-The command below will separate the read coordinates (one line for each chromosome) and with the simple perl script the overlapping reads will be joined into a single coordinate for each chromosome.
+The command below will separate the read coordinates (one line for each chromosome) and with the simple perl script the overlapping reads will be joined into a single coordinate for each chromosome. ::
 
   $ awk '{print $1"\t"$2"\t"$3"\t"$11"\n"$4"\t"$5"\t"$6"\t"$11}' input_after_pipeline.bed > reads_in_final_clusters.bed
   $ perl input.pl reads_in_final_clusters.bed > merged.bed
 
-The merged.bed file can then be used to check for recurrent artifacts and remove them. With bedtools intersect you can compare both your file and the recurrent artifact list, and with the subsequent awk commands you select only the events with both chromosome positions equal to a single other event in the artifact list. The output contains only the ids for the events you should remove from your final list.
+The merged.bed file can then be used to check for recurrent artifacts and remove them. With bedtools intersect you can compare both your file and the recurrent artifact list, and with the subsequent awk commands you select only the events with both chromosome positions equal to a single other event in the artifact list. The output contains only the ids for the events you should remove from your final list. ::
 
   $ bedtools intersect –wo –a merged.bed –b recurrent_artifacts.bed | awk ‘{print $1,$4,$8}’ | sort | uniq | awk ‘{print $2,$3}’ | sort | uniq –d | awk ‘{print $1}’ | sort | uniq > recurrent_merged.bed
   $ fgrep –w –v –f recurrent_merged.bed merged.bed > merged_final.bed
