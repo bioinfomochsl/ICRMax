@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to ICRMax's documentation!
+ICRmax
 ==================================
 
 Contents:
@@ -12,11 +12,15 @@ Contents:
    :maxdepth: 2
 
 
+What is ICRmax?
+==================================
+ICRmax is a computational pipeline designed for the cost-effective identification of a minimal set of tumor-specific interchromosomal rearrangements (ICRs) for clinical application. 
 
-Indices and tables
-==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+... Indices and tables
+... ==================
+
+... * :ref:`genindex`
+... * :ref:`modindex`
+... * :ref:`search`
 
