@@ -35,24 +35,29 @@ The cost reduction resulting from this approach creates an opportunity to implem
 Requirements
 ==================================
 All the steps necessary for the ICRmax pipeline can be performed using Bedtools and Linux/Unix grep/sed/AWK commands. For SOLiD reads we also recommend the BLAT realignment and filtering step.
+
 Download the files of regions to filter file1 file2 file3
-To install Bedtools see bedtools.readthedocs.org/en/latest/
-To install BLAT see users.soe.ucsc.edu/~kent/src/
+
+To install Bedtools see http://bedtools.readthedocs.org/en/latest/
+
+To install BLAT see http://users.soe.ucsc.edu/~kent/src/
 
 File formats
 ==================================
 ICRmax starts from mate-pair whole genome sequence alignment data in BED format, allowing users to submit their sequencing results through the mapping algorithm of choice. 
 
 To transform paired bam files into bedpe use:
+
 $ bedtools bamtobed –bedpe <input.bam>
 
 Example input:
-$1 == read1_chromosome 
-$2 == read1_start_position 
-$3 == read1_end_position 
-$4 == read2_chromosome 
-$5 == read2_start_position 
-$6 == read2_end_position 
+
+* $1 == read1_chromosome 
+* $2 == read1_start_position 
+* $3 == read1_end_position 
+* $4 == read2_chromosome 
+* $5 == read2_start_position 
+* $6 == read2_end_position 
 $7 == matepair_id
 $8 == qual
 $9 == read1_strand 
