@@ -58,13 +58,27 @@ Example input:
 * $4 == read2_chromosome 
 * $5 == read2_start_position 
 * $6 == read2_end_position 
-$7 == matepair_id
-$8 == qual
-$9 == read1_strand 
-$10 == read2_strand
+* $7 == matepair_id
+* $8 == qual
+* $9 == read1_strand 
+* $10 == read2_strand
 
 Overview 
 ==================================
 To run ICRmax in a Linux/Unix environment, simply follow the step-by-step command line after mapping the reads to the reference genome and downloading the necessary files. The pipeline is summarized in the figure below:
 Fig1
+
+Preparing the WGS reads
+==================================
+Mate-pair or paired-end reads resulting from whole genome sequencing must be aligned to the reference genome. Users are free to choose the best mapping algorithm for their platform. Suggestions are NovoAlignCS and BioScope for SOLiD mate-pair reads and BWA or ... for Illumina paired-end reads.
+
+Alignment to alternative reference assemblies is also advised since differences in assembly can give rise to mate-pair reads mapped in different chromosomes according to one assembly but not another. Some alternative assemblies that can be used for mapping are:
+
+HuRef (J. Craig Venter Institute) [Levy et. al 2007]
+
+GRCh37_alt (Partial reference genome with alternative representations – Genome Reference Consortium)
+
+    CRA (Human chr7 complete sequence – The Center for Applied Genomics) [Scherer et al. 2003]
+
+    Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have already mapped to the same chromosome.
 
