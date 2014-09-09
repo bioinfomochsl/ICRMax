@@ -121,3 +121,55 @@ The merged.bed file can then be used to check for recurrent artifacts and remove
   $ bedtools intersect –wo –a merged.bed –b recurrent_artifacts.bed | awk ‘{print $1,$4,$8}’ | sort | uniq | awk ‘{print $2,$3}’ | sort | uniq –d | awk ‘{print $1}’ | sort | uniq > recurrent_merged.bed
   $ fgrep –w –v –f recurrent_merged.bed merged.bed > merged_final.bed
 
+Detecting new recurrent events in your samples
+==================================
+Comparison between rearrangements from different samples can be easily done with the bedtools merge command as used above, make sure to allow for a distance similar to the clustering distance used (-d 1000) outside of the read span and alter the cluster names to include sample identification (ex: 14774_4005_1_RT2). This way, after the bedtools merge command using the parameters –nms you should have a single cluster and the different cluster names separated by a semicolon. ::
+
+  $ sortBed all_sample_rearrangements.bed | bedtools merge –d 1000 –nms > merged_samples.bed
+
+To process this file a simple perl script is usedi ::
+
+  $ perl find_recurrent.pl merged_samples.bed > tmp_file
+  $ awk –F “\t” ‘{print $3}’ tmp_file | sort | uniq –c | awk ‘{if ($1>=2) print $2}’ > recurrent_in_two_or_more_samples
+  $ fgrep –w –v –f recurrent_in_two_or_more_samples tmp_file | awk ‘{print $1}’ > final_non_recurrent_list
+
+Visualizing output in Circos plots
+==================================
+Circos representation (circos.ca) is a common way to visualize structural variations detected in a genome. Here we provide the configuration files necessary for generating a Circos plot similar to the one illustrated with your data.
+
+Fig_circos_AAS
+
+To install Circos see http://circos.ca/software/download/circos
+fileX.conf   
+
+Circos plot command: ::
+  $ circos –conf conf.conf
+
+Updates
+==================================
+We intend to release updates for our recurrent artifact list as we analyze more mate-pair WGS samples (both tumor and normal). 
+
+We also encourage users to submit new recurrent artifacts with the appropriate read support to improve this resource. Get in touch with our group through email.
+
+Data Access
+==================================
+The WGS data for samples used in our analyses were deposited in the European Nucleotide Archive (ENA; http://www.ebi.ac.uk/ena) under accession number PRJEB4781.
+
+WGS data from the 1000 Genomes project was accessed through the Open Science Data Cloud (http://www.opensciencedatacloud.org). 
+
+Acknowledgements
+==================================
+?
+
+Authors
+==================================
+Elisa Donnard
+
+Pedro Galante
+
+References
+==================================
+Paper ICRmax
+
+Paper Biomarcadores
+
