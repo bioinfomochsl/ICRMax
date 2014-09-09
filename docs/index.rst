@@ -142,7 +142,7 @@ Fig_circos_AAS
 To install Circos see http://circos.ca/software/download/circos
 fileX.conf   
 
-Circos plot command: ::
+Circos plot command ::
   $ circos –conf conf.conf
 
 Updates
