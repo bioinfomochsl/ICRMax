@@ -74,11 +74,50 @@ Mate-pair or paired-end reads resulting from whole genome sequencing must be ali
 
 Alignment to alternative reference assemblies is also advised since differences in assembly can give rise to mate-pair reads mapped in different chromosomes according to one assembly but not another. Some alternative assemblies that can be used for mapping are:
 
-HuRef (J. Craig Venter Institute) [Levy et. al 2007]
+<b>HuRef</b> (J. Craig Venter Institute) [Levy et. al 2007]
 
-GRCh37_alt (Partial reference genome with alternative representations – Genome Reference Consortium)
+<b>GRCh37_alt</b> (Partial reference genome with alternative representations – Genome Reference Consortium)
 
-    CRA (Human chr7 complete sequence – The Center for Applied Genomics) [Scherer et al. 2003]
+<b>CRA</b> (Human chr7 complete sequence – The Center for Applied Genomics) [Scherer et al. 2003]
 
-    Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have already mapped to the same chromosome.
+Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have already mapped to the same chromosome.
+
+Step-by-step command line
+==================================
+At this step you should have a paired BED file (bedpe) containing the aligned mate-pair or paired-end reads mapped in different chromosomes with mapping quality greater than or equal to 20, after the reference genome mapping and mapping to alternative reference assemblies. The duplicate reads should also have been removed. For that, samtools rmdup is a good option (see http://www.htslib.org/man/samtools)
+
+Step-by-step here (arq. Suplementar ICRmax)
+==================================
+
+Initial ICRmax output
+==================================
+Example initial output:
+
+* $1 == read1_chromosome 
+* $2 == read1_start_position 
+* $3 == read1_end_position 
+* $4 == read2_chromosome 
+* $5 == read2_start_position 
+* $6 == read2_end_position 
+* $7 == matepair_id
+* $8 == qual 
+* $9 == read1_strand 
+* $10 == read2_strand 
+* $11 == cluster_id
+
+Cluster ids should have 3 numbers (eg: 14774_4005_1). Each cluster id groups reads mapping around one ICR breakpoint.
+
+Removing recurrent events
+==================================
+The final clusters of mate-pair reads can be merged at this stage so that each event has two coordinates, one in each chromosome.
+
+The command below will separate the read coordinates (one line for each chromosome) and with the simple perl script the overlapping reads will be joined into a single coordinate for each chromosome.
+
+  $ awk '{print $1"\t"$2"\t"$3"\t"$11"\n"$4"\t"$5"\t"$6"\t"$11}' input_after_pipeline.bed > reads_in_final_clusters.bed
+  $ perl input.pl reads_in_final_clusters.bed > merged.bed
+
+The merged.bed file can then be used to check for recurrent artifacts and remove them. With bedtools intersect you can compare both your file and the recurrent artifact list, and with the subsequent awk commands you select only the events with both chromosome positions equal to a single other event in the artifact list. The output contains only the ids for the events you should remove from your final list.
+
+  $ bedtools intersect –wo –a merged.bed –b recurrent_artifacts.bed | awk ‘{print $1,$4,$8}’ | sort | uniq | awk ‘{print $2,$3}’ | sort | uniq –d | awk ‘{print $1}’ | sort | uniq > recurrent_merged.bed
+  $ fgrep –w –v –f recurrent_merged.bed merged.bed > merged_final.bed
 
