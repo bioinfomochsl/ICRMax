@@ -127,7 +127,7 @@ Comparison between rearrangements from different samples can be easily done with
 
   $ sortBed all_sample_rearrangements.bed | bedtools merge –d 1000 –nms > merged_samples.bed
 
-To process this file a simple perl script is usedi ::
+To process this file a simple perl script is used ::
 
   $ perl find_recurrent.pl merged_samples.bed > tmp_file
   $ awk –F “\t” ‘{print $3}’ tmp_file | sort | uniq –c | awk ‘{if ($1>=2) print $2}’ > recurrent_in_two_or_more_samples
@@ -142,7 +142,8 @@ Fig_circos_AAS
 To install Circos see http://circos.ca/software/download/circos
 fileX.conf   
 
-Circos plot command ::
+Circos plot command: ::
+
   $ circos –conf conf.conf
 
 Updates
