@@ -60,7 +60,7 @@ To transform paired bam files into bedpe use: ::
 
 Example bedpe file:
 
-.. image:: https://www.dropbox.com/s/g5twij901kjip8q/inputfile.png?dl=0
+.. image:: images/inputfile.png?dl=0
    :scale: 40%
    :align: center
 
@@ -69,7 +69,7 @@ Overview
 
 To run ICRmax simply follow the Step-by-step command line summarized in the figure below:
 
-.. image:: https://www.dropbox.com/s/giqbt3t38c811z1/Donnard_Fig1.png?dl=0
+.. image:: images/Donnard_Fig1.png?dl=0
    :scale: 40%
    :align: center
 
