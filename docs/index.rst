@@ -227,7 +227,7 @@ Acknowledgements
 ==================================
 Daniel T. Ohara
 
-Authors
+Contact
 ==================================
 Elisa Donnard, edonnard at mochsl.org.br
 
