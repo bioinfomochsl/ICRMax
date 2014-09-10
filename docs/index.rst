@@ -217,7 +217,7 @@ Updates
 ==================================
 We intend to release updates for our recurrent artifact list as we analyze more mate-pair WGS samples (both tumor and normal). 
 
-We also encourage users to submit new recurrent artifacts with the appropriate read support to improve this resource. Get in touch with our group (see **Contact**).
+We also encourage users to submit new recurrent artifacts with the appropriate read support to improve this resource. Get in touch with our group (see :ref:_contact).
 
 Data Access
 ==================================
@@ -228,6 +228,8 @@ WGS data from the 1000 Genomes project was accessed through the Open Science Dat
 Acknowledgements
 ==================================
 Daniel T. Ohara
+
+.. _contact:
 
 Contact
 ==================================
