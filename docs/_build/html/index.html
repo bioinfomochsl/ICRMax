@@ -81,52 +81,84 @@
 </div>
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>To run ICRmax simply follow the Step-by-step command line summarized in the figure below:</p>
+<p>To run ICRmax simply follow the <strong>Step-by-step command line</strong> summarized in the figure below:</p>
 <a class="reference internal image-reference" href="_images/Donnard_Fig1.png"><img alt="_images/Donnard_Fig1.png" class="align-center" src="_images/Donnard_Fig1.png" /></a>
 </div>
 <div class="section" id="preparing-the-wgs-reads">
 <h1>Preparing the WGS reads<a class="headerlink" href="#preparing-the-wgs-reads" title="Permalink to this headline">¶</a></h1>
-<p>Mate-pair or paired-end reads resulting from whole genome sequencing must be aligned to the reference genome. Users are free to choose the best mapping algorithm for their platform. Suggestions are NovoAlignCS and BioScope for SOLiD mate-pair reads and BWA or ... for Illumina paired-end reads.</p>
-<p>Alignment to alternative reference assemblies is also advised since differences in assembly can give rise to mate-pair reads mapped in different chromosomes according to one assembly but not another. Some alternative assemblies that can be used for mapping are:</p>
+<p>Mate-pair (usually from SOLiD platform) or paired-end (usually from Illumina platform) reads resulting from whole genome sequencing must be aligned to the reference genome. Users are free to choose the best mapping algorithm for their platform. Suggestions are NovoAlignCS or BioScope for SOLiD mate-pair reads and BWA or Bowtie2 for Illumina paired-end reads.</p>
+<p>Alignment to alternative reference assemblies is also advised since differences in assembly can give rise to mate-pair reads mapped in different chromosomes according to one assembly but not another. The alternative assemblies that can be used for mapping are:</p>
 <p><strong>HuRef</strong> (J. Craig Venter Institute) [Levy et. al 2007]</p>
 <p><strong>GRCh37_alt</strong> (Partial reference genome with alternative representations – Genome Reference Consortium)</p>
 <p><strong>CRA</strong> (Human chr7 complete sequence – The Center for Applied Genomics) [Scherer et al. 2003]</p>
-<p>Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have already mapped to the same chromosome.</p>
+<p>Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have reliable mappings to the same chromosome.</p>
 </div>
 <div class="section" id="step-by-step-command-line">
 <h1>Step-by-step command line<a class="headerlink" href="#step-by-step-command-line" title="Permalink to this headline">¶</a></h1>
 <p>At this step you should have a paired BED file (bedpe) containing the aligned mate-pair or paired-end reads mapped in different chromosomes with mapping quality greater than or equal to 20, after the reference genome mapping and mapping to alternative reference assemblies. The duplicate reads should also have been removed. For that, samtools rmdup is a good option (see <a class="reference external" href="http://www.htslib.org/man/samtools">http://www.htslib.org/man/samtools</a>)</p>
+<blockquote>
+<div><p><strong>1.</strong> Remove reads mapped in the mitochondrial chromosome and order the bed file:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ grep -v &#39;chrM&#39; input.bed | sortBed &gt; step1_woM.bed
+</pre></div>
 </div>
-<div class="section" id="step-by-step-here-arq-suplementar-icrmax">
-<h1>Step-by-step here (arq. Suplementar ICRmax)<a class="headerlink" href="#step-by-step-here-arq-suplementar-icrmax" title="Permalink to this headline">¶</a></h1>
+<p><strong>2.</strong> Remove reads mapped in centromere and telomere regions. To do that on both reads in the mate pair you must invert the file and repeat the command.</p>
+<p>Download the file with centromere end telomere positions centr_and_tel.bed:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ bedtools subtract -A -a step1_woM.bed -b centr_and_tel.bed &gt; step2.wo_centr_tel.bed
+$ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}&#39; step2.wo_centr_tel.bed | sed &quot;s/\s/\t/g&quot; | sortBed &gt; step2.wo_centr_tel.inv.bed
+$ bedtools subtract -A -a step2.wo_centr_tel.inv.bed -b centr_and_tel.bed &gt; step2.wo_centr_tel.final.bed
+</pre></div>
+</div>
+<p><strong>3.</strong> Remove reads mapped in masked regions. Download the file with regions to mask all_to_mask.bed:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ bedtools subtract -A -f 1.0 -a step2.wo_centr_tel.final.bed -b all_to_mask.bed &gt; step3.masked.bed
+$ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}&#39; step3.masked.bed | sed &quot;s/\s/\t/g&quot; | sortBed &gt; step3.masked.inv.bed
+$ bedtools subtract -A -f 1.0 -a step3.masked.inv.bed -b all_to_mask.bed | sortBed &gt; step3.masked.final.bed
+</pre></div>
+</div>
+<p><strong>4.</strong> Cluster the reads from different mate pairs mapped in the same chromosome. Use mean insert size +2s.d. as cluster distance (-d size, e.g. 1000). At this point observe that a cluster number will be generated and the file will have an extra column ($11):</p>
+<div class="highlight-python"><div class="highlight"><pre>$ bedtools cluster -i step3.masked.final.bed -d 1000 &gt; step4.cluster.bed
+$ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9,$11}&#39; step4.cluster.bed | sed &quot;s/\s/\t/g&quot; | sortBed &gt; step4.cluster.inv.bed
+$ bedtools cluster -i step4.cluster.inv.bed -d 1000 &gt; step4.cluster.final.bed
+</pre></div>
+</div>
+<p><strong>5.</strong> Join cluster numbers generated for both sides and select only clusters with 3 or more reads:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sed -i &quot;s/\t/_/11&quot; step4.cluster.final.bed
+$ awk &#39;{print $11}&#39; step4.cluster.final.bed | nsort | uniq -c | awk &#39;{if ($1&gt;=3) print $2}&#39; &gt; clusters_over_3_reads
+$ fgrep -w -f clusters_over_3_reads step4.cluster.final.bed &gt; step5_cutoff3.bed
+</pre></div>
+</div>
+<p><strong>6.</strong> For SOLiD platform we suggest realigning the reads with BLAT using as input the sequences resulting from the initial alignment, BLAT parameters are the same used as default in the webtool:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ blat -stepSize=5 -repMatch=2253 -minScore=24 -minIdentity=80 -noTrimA -fine -out=pslx genome.2bit input.fa
+</pre></div>
+</div>
+<p>Parse BLAT results and remove reads mapped in the same chromosome after alignment.</p>
+<p><strong>7.</strong> Invert the read order in the BED file once again and recluster the reads once more, this step should remove any clusters containing large gaps from reads that were removed by the BLAT filter. After that select only clusters still represented by at least 3 reads, at this point there are three numbers in the cluster id:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9,$11}&#39; step6_BLAT_filter.bed | sed &quot;s/\s/\t/g&quot; | sortBed | bedtools cluster -d 1000 &gt; step7_recluster.bed
+$sed -i &quot;s/\t/_/11&quot; step7_recluster.bed
+$awk &#39;{print $11}&#39; step7_recluster.bed | nsort | uniq -c | awk &#39;{if ($1&gt;=3) print $2}&#39; &gt; clusters_over_3_reads
+$fgrep -w -f clusters_over_3_reads3 step7_recluster.bed &gt; step7_recluster_cutoff3.bed
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="initial-icrmax-output">
 <h1>Initial ICRmax output<a class="headerlink" href="#initial-icrmax-output" title="Permalink to this headline">¶</a></h1>
 <p>Example initial output:</p>
-<ul class="simple">
-<li>$1 == read1_chromosome</li>
-<li>$2 == read1_start_position</li>
-<li>$3 == read1_end_position</li>
-<li>$4 == read2_chromosome</li>
-<li>$5 == read2_start_position</li>
-<li>$6 == read2_end_position</li>
-<li>$7 == matepair_id</li>
-<li>$8 == qual</li>
-<li>$9 == read1_strand</li>
-<li>$10 == read2_strand</li>
-<li>$11 == cluster_id</li>
-</ul>
+<a class="reference internal image-reference" href="_images/outputfile.png"><img alt="_images/outputfile.png" class="align-center" src="_images/outputfile.png" /></a>
 <p>Cluster ids should have 3 numbers (eg: 14774_4005_1). Each cluster id groups reads mapping around one ICR breakpoint.</p>
 </div>
 <div class="section" id="removing-recurrent-events">
 <h1>Removing recurrent events<a class="headerlink" href="#removing-recurrent-events" title="Permalink to this headline">¶</a></h1>
 <p>The final clusters of mate-pair reads can be merged at this stage so that each event has two coordinates, one in each chromosome.</p>
 <p>The command below will separate the read coordinates (one line for each chromosome) and with the simple perl script the overlapping reads will be joined into a single coordinate for each chromosome.</p>
-<div class="highlight-python"><div class="highlight"><pre>$ awk &#39;{print $1&quot;\t&quot;$2&quot;\t&quot;$3&quot;\t&quot;$11&quot;\n&quot;$4&quot;\t&quot;$5&quot;\t&quot;$6&quot;\t&quot;$11}&#39; input_after_pipeline.bed &gt; reads_in_final_clusters.bed
-$ perl input.pl reads_in_final_clusters.bed &gt; merged.bed
+<p>Download here <a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/merge_bed_reads.pl">merge_bed_reads.pl</a></p>
+<div class="highlight-python"><div class="highlight"><pre>$ awk &#39;{print $1&quot;\t&quot;$2&quot;\t&quot;$3&quot;\t&quot;$11&quot;\n&quot;$4&quot;\t&quot;$5&quot;\t&quot;$6&quot;\t&quot;$11}&#39; step7_recluster_cutoff3.bed &gt; reads_in_final_clusters.bed
+$ perl merge_bed_reads.pl reads_in_final_clusters.bed &gt; merged.bed
 </pre></div>
 </div>
 <p>The merged.bed file can then be used to check for recurrent artifacts and remove them. With bedtools intersect you can compare both your file and the recurrent artifact list, and with the subsequent awk commands you select only the events with both chromosome positions equal to a single other event in the artifact list. The output contains only the ids for the events you should remove from your final list.</p>
+<p>As a list of recurrent rearrangements you can use either one of the downloaded files (or both):</p>
+<p><a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/recurrent_artifacts.bed">recurrent_artifacts.bed</a> (list of recurrent artifacts found in our tumor samples)</p>
+<p><a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/recurrent_1000G.bed">recurrent_1000G.bed</a> (list of recurrent artifacts found in 3 or more 1000G individuals)</p>
 <div class="highlight-python"><div class="highlight"><pre>$ bedtools intersect –wo –a merged.bed –b recurrent_artifacts.bed | awk ‘{print $1,$4,$8}’ | sort | uniq | awk ‘{print $2,$3}’ | sort | uniq –d | awk ‘{print $1}’ | sort | uniq &gt; recurrent_merged.bed
 $ fgrep –w –v –f recurrent_merged.bed merged.bed &gt; merged_final.bed
 </pre></div>
@@ -138,7 +170,7 @@ $ fgrep –w –v –f recurrent_merged.bed merged.bed &gt; merged_final.bed
 <div class="highlight-python"><div class="highlight"><pre>$ sortBed all_sample_rearrangements.bed | bedtools merge –d 1000 –nms &gt; merged_samples.bed
 </pre></div>
 </div>
-<p>To process this file a simple perl script is used</p>
+<p>To process this file a simple perl script is used (download here <a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/find_recurrent.pl">find_recurrent.pl</a>)</p>
 <div class="highlight-python"><div class="highlight"><pre>$ perl find_recurrent.pl merged_samples.bed &gt; tmp_file
 $ awk –F “\t” ‘{print $3}’ tmp_file | sort | uniq –c | awk ‘{if ($1&gt;=2) print $2}’ &gt; recurrent_in_two_or_more_samples
 $ fgrep –w –v –f recurrent_in_two_or_more_samples tmp_file | awk ‘{print $1}’ &gt; final_non_recurrent_list
@@ -147,19 +179,26 @@ $ fgrep –w –v –f recurrent_in_two_or_more_samples tmp_file | awk ‘{print
 </div>
 <div class="section" id="visualizing-output-in-circos-plots">
 <h1>Visualizing output in Circos plots<a class="headerlink" href="#visualizing-output-in-circos-plots" title="Permalink to this headline">¶</a></h1>
-<p>Circos representation (circos.ca) is a common way to visualize structural variations detected in a genome. Here we provide the configuration files necessary for generating a Circos plot similar to the one illustrated with your data.</p>
-<p>Fig_circos_AAS</p>
-<p>To install Circos see <a class="reference external" href="http://circos.ca/software/download/circos">http://circos.ca/software/download/circos</a>
-fileX.conf</p>
+<p>Circos representation (<a class="reference external" href="http://circos.ca">http://circos.ca</a>) is a common way to visualize structural variations detected in a genome. Here we provide the configuration files necessary for generating a Circos plot similar to the one illustrated below with your data.</p>
+<p><a class="reference external" href="https://www.dropbox.com/s/r2f72d0m0c9ifr3/AAScircos.png?dl=0">https://www.dropbox.com/s/r2f72d0m0c9ifr3/AAScircos.png?dl=0</a></p>
+<p>To install Circos see <a class="reference external" href="http://circos.ca/software/download/circos">http://circos.ca/software/download/circos</a></p>
+<p>Download <a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/circos_conf.tar.bz2">here</a> the configuration files</p>
+<p>To run circos your input file name should be input_inter.txt or changed in the links.conf file</p>
+<p>Input format example:</p>
+<a class="reference internal image-reference" href="_images/inputcircos.png"><img alt="_images/inputcircos.png" class="align-center" src="_images/inputcircos.png" /></a>
+<p>To convert a bed file (final merged version) to the circos input file:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ awk –F “\t” ‘{print $4,$1,$2,$3}’ merged.bed | sed “s/chr/hs/;s/X/x/;s/Y/y/” &gt; input_inter.txt
+</pre></div>
+</div>
 <p>Circos plot command:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ circos –conf conf.conf
+<div class="highlight-python"><div class="highlight"><pre>$ circus –conf circos.conf
 </pre></div>
 </div>
 </div>
 <div class="section" id="updates">
 <h1>Updates<a class="headerlink" href="#updates" title="Permalink to this headline">¶</a></h1>
 <p>We intend to release updates for our recurrent artifact list as we analyze more mate-pair WGS samples (both tumor and normal).</p>
-<p>We also encourage users to submit new recurrent artifacts with the appropriate read support to improve this resource. Get in touch with our group through email.</p>
+<p>We also encourage users to submit new recurrent artifacts with the appropriate read support to improve this resource. Get in touch with our group (see <strong>Contact</strong>).</p>
 </div>
 <div class="section" id="data-access">
 <h1>Data Access<a class="headerlink" href="#data-access" title="Permalink to this headline">¶</a></h1>
@@ -168,15 +207,21 @@ fileX.conf</p>
 </div>
 <div class="section" id="acknowledgements">
 <h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h1>
-<p>?</p>
+<p>Daniel T. Ohara</p>
 </div>
 <div class="section" id="authors">
 <h1>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h1>
-<p>Elisa Donnard</p>
-<p>Pedro Galante</p>
+<p>Elisa Donnard, edonnard at mochsl.org.br</p>
+<p>Pedro Galante, pgalante at mochsl.org.br</p>
 </div>
 <div class="section" id="references">
 <h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
+<p>ICRmax: an optimized approach to detect tumor-specific InterChromosomal Rearrangements for Clinical Application</p>
+<p>Donnard ER, Carpinetti P, Navarro FCP, Perez RO, Habr-Gama A, Parmigiani RB, Camargo AA and Galante PAF</p>
+<p>[under review]</p>
+<p>Structural Variations in Rectal Cancer as Biomarkers for Detecting Residual Disease after Neoadjuvant Treatment</p>
+<p>Carpinetti P*, Donnard ER*, Perez RO, Habr-Gama A, Parmigiani RB, Galante PAF and Camargo AA</p>
+<p>[manuscript in preparation]</p>
 <p>Paper ICRmax</p>
 <p>Paper Biomarcadores</p>
 </div>
@@ -197,7 +242,6 @@ fileX.conf</p>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#preparing-the-wgs-reads">Preparing the WGS reads</a></li>
 <li><a class="reference internal" href="#step-by-step-command-line">Step-by-step command line</a></li>
-<li><a class="reference internal" href="#step-by-step-here-arq-suplementar-icrmax">Step-by-step here (arq. Suplementar ICRmax)</a></li>
 <li><a class="reference internal" href="#initial-icrmax-output">Initial ICRmax output</a></li>
 <li><a class="reference internal" href="#removing-recurrent-events">Removing recurrent events</a></li>
 <li><a class="reference internal" href="#detecting-new-recurrent-events-in-your-samples">Detecting new recurrent events in your samples</a></li>
