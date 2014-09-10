@@ -81,7 +81,7 @@
 </div>
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>To run ICRmax simply follow the <strong>Step-by-step command line</strong> summarized in the figure below:</p>
+<p>To run ICRmax simply follow the <em class="xref std std-ref">step-by-step-command-line</em> summarized in the figure below:</p>
 <a class="reference internal image-reference" href="_images/Donnard_Fig1.png"><img alt="_images/Donnard_Fig1.png" class="align-center" src="_images/Donnard_Fig1.png" /></a>
 </div>
 <div class="section" id="preparing-the-wgs-reads">
@@ -108,7 +108,7 @@ $ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}&#39; step2.wo_centr_tel.bed | 
 $ bedtools subtract -A -a step2.wo_centr_tel.inv.bed -b centr_and_tel.bed &gt; step2.wo_centr_tel.final.bed
 </pre></div>
 </div>
-<p><strong>3.</strong> Remove reads mapped in masked regions. Download the file with regions to mask all_to_mask.bed:</p>
+<p><strong>3.</strong> Remove reads mapped in masked regions. Download the file with regions to mask <a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/all_to_mask.bed">all_to_mask.bed</a>:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ bedtools subtract -A -f 1.0 -a step2.wo_centr_tel.final.bed -b all_to_mask.bed &gt; step3.masked.bed
 $ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}&#39; step3.masked.bed | sed &quot;s/\s/\t/g&quot; | sortBed &gt; step3.masked.inv.bed
 $ bedtools subtract -A -f 1.0 -a step3.masked.inv.bed -b all_to_mask.bed | sortBed &gt; step3.masked.final.bed

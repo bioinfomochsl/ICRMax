@@ -61,12 +61,12 @@ To transform paired bam files into bedpe use: ::
 Example bedpe file:
 
 .. image:: images/inputfile.png
-   :scale: 40%
+   :scale: 100%
    :align: center
 
 Overview 
 ==================================
-To run ICRmax simply follow the **Step-by-step command line** summarized in the figure below:
+To run ICRmax simply follow the :ref:`step-by-step-command-line` summarized in the figure below:
 
 .. image:: images/Donnard_Fig1.png
    :scale: 40%
@@ -102,7 +102,7 @@ At this step you should have a paired BED file (bedpe) containing the aligned ma
     $ awk '{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}' step2.wo_centr_tel.bed | sed "s/\s/\t/g" | sortBed > step2.wo_centr_tel.inv.bed
     $ bedtools subtract -A -a step2.wo_centr_tel.inv.bed -b centr_and_tel.bed > step2.wo_centr_tel.final.bed
 
-  **3.** Remove reads mapped in masked regions. Download the file with regions to mask all_to_mask.bed: ::
+  **3.** Remove reads mapped in masked regions. Download the file with regions to mask `all_to_mask.bed`_: ::
 
     $ bedtools subtract -A -f 1.0 -a step2.wo_centr_tel.final.bed -b all_to_mask.bed > step3.masked.bed
     $ awk '{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}' step3.masked.bed | sed "s/\s/\t/g" | sortBed > step3.masked.inv.bed
@@ -138,7 +138,7 @@ Initial ICRmax output
 Example initial output:
 
 .. image:: images/outputfile.png
-   :scale: 40%
+   :scale: 100%
    :align: center
 
 Cluster ids should have 3 numbers (eg: 14774_4005_1). Each cluster id groups reads mapping around one ICR breakpoint.
