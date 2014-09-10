@@ -96,7 +96,7 @@ At this step you should have a paired BED file (bedpe) containing the aligned ma
 
   **2.** Remove reads mapped in centromere and telomere regions. To do that on both reads in the mate pair you must invert the file and repeat the command. 
 
-  Download the file with centromere end telomere positions centr_and_tel.bed: ::
+  Download the file with centromere end telomere positions `centr_and_tel.bed`_: ::
 
     $ bedtools subtract -A -a step1_woM.bed -b centr_and_tel.bed > step2.wo_centr_tel.bed
     $ awk '{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}' step2.wo_centr_tel.bed | sed "s/\s/\t/g" | sortBed > step2.wo_centr_tel.inv.bed
@@ -185,7 +185,9 @@ Visualizing output in Circos plots
 ==================================
 Circos representation (http://circos.ca) is a common way to visualize structural variations detected in a genome. Here we provide the configuration files necessary for generating a Circos plot similar to the one illustrated below with your data.
 
-https://www.dropbox.com/s/r2f72d0m0c9ifr3/AAScircos.png?dl=0
+.. image:: images/AAScircos.png
+   :scale: 40%
+   :align: center
 
 To install Circos see http://circos.ca/software/download/circos
 
@@ -244,10 +246,3 @@ Structural Variations in Rectal Cancer as Biomarkers for Detecting Residual Dise
 Carpinetti P*, Donnard ER*, Perez RO, Habr-Gama A, Parmigiani RB, Galante PAF and Camargo AA 
 
 [manuscript in preparation]
-
-
-
-Paper ICRmax
-
-Paper Biomarcadores
-

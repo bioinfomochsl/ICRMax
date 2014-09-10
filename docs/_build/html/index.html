@@ -102,7 +102,7 @@
 </pre></div>
 </div>
 <p><strong>2.</strong> Remove reads mapped in centromere and telomere regions. To do that on both reads in the mate pair you must invert the file and repeat the command.</p>
-<p>Download the file with centromere end telomere positions centr_and_tel.bed:</p>
+<p>Download the file with centromere end telomere positions <a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/centr_and_tel.bed">centr_and_tel.bed</a>:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ bedtools subtract -A -a step1_woM.bed -b centr_and_tel.bed &gt; step2.wo_centr_tel.bed
 $ awk &#39;{print $4,$5,$6,$1,$2,$3,$7,$8,$10,$9}&#39; step2.wo_centr_tel.bed | sed &quot;s/\s/\t/g&quot; | sortBed &gt; step2.wo_centr_tel.inv.bed
 $ bedtools subtract -A -a step2.wo_centr_tel.inv.bed -b centr_and_tel.bed &gt; step2.wo_centr_tel.final.bed
@@ -180,7 +180,7 @@ $ fgrep –w –v –f recurrent_in_two_or_more_samples tmp_file | awk ‘{print
 <div class="section" id="visualizing-output-in-circos-plots">
 <h1>Visualizing output in Circos plots<a class="headerlink" href="#visualizing-output-in-circos-plots" title="Permalink to this headline">¶</a></h1>
 <p>Circos representation (<a class="reference external" href="http://circos.ca">http://circos.ca</a>) is a common way to visualize structural variations detected in a genome. Here we provide the configuration files necessary for generating a Circos plot similar to the one illustrated below with your data.</p>
-<p><a class="reference external" href="https://www.dropbox.com/s/r2f72d0m0c9ifr3/AAScircos.png?dl=0">https://www.dropbox.com/s/r2f72d0m0c9ifr3/AAScircos.png?dl=0</a></p>
+<a class="reference internal image-reference" href="_images/AAScircos.png"><img alt="_images/AAScircos.png" class="align-center" src="_images/AAScircos.png" /></a>
 <p>To install Circos see <a class="reference external" href="http://circos.ca/software/download/circos">http://circos.ca/software/download/circos</a></p>
 <p>Download <a class="reference external" href="http://www.bioinfo.mochsl.org.br/icrmax/circos_conf.tar.bz2">here</a> the configuration files</p>
 <p>To run circos your input file name should be input_inter.txt or changed in the links.conf file</p>
@@ -222,8 +222,6 @@ $ fgrep –w –v –f recurrent_in_two_or_more_samples tmp_file | awk ‘{print
 <p>Structural Variations in Rectal Cancer as Biomarkers for Detecting Residual Disease after Neoadjuvant Treatment</p>
 <p>Carpinetti P*, Donnard ER*, Perez RO, Habr-Gama A, Parmigiani RB, Galante PAF and Camargo AA</p>
 <p>[manuscript in preparation]</p>
-<p>Paper ICRmax</p>
-<p>Paper Biomarcadores</p>
 </div>
 
 
