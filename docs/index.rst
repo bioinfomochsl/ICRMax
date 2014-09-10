@@ -26,7 +26,7 @@ ICRmax is a computational pipeline designed for the cost-effective identificatio
 
 How ICRmax works
 ==================================
-ICRmax was developed with a set of strict filters for repetitive regions of the genome and inter-tumor comparison to eliminate false positive events. The pipeline is able to remove most cases of non-somatic events without the need for sequencing the matched normal genome for each sample.
+ICRmax was developed with a set of strict filters to eliminate false positive ICR events. The pipeline is able to remove most cases of non-somatic events without the need for sequencing the matched normal genome for each sample.
 
 Benefits
 ==================================
@@ -34,39 +34,44 @@ The cost reduction resulting from this approach creates an opportunity to implem
 
 Requirements
 ==================================
-All the steps necessary for the ICRmax pipeline can be performed using Bedtools and Linux/Unix grep/sed/AWK commands. For SOLiD reads we also recommend the BLAT realignment and filtering step.
+All the steps necessary for the ICRmax pipeline can be performed using open-source software/pipelines and publicly available data.
 
-Download the files of regions to filter file1 file2 file3
+**Software and pipelines:**
 
-To install Bedtools see http://bedtools.readthedocs.org/en/latest/
+* A computer running Linux (suggested distributions: Ubuntu, Fedora or CentOS. ICRMax should work on all Linux distributions).
+* BLAT (how to install: http://users.soe.ucsc.edu/~kent/src/)
+* Bedtools (how to install: http://bedtools.readthedocs.org/en/latest/)
 
-To install BLAT see http://users.soe.ucsc.edu/~kent/src/
+**Data:**
 
-File formats
-==================================
-ICRmax starts from mate-pair whole genome sequence alignment data in BED format, allowing users to submit their sequencing results through the mapping algorithm of choice. 
+* Alternative genome assemblies (see Preparing the WGS reads).
+* Recurrent artifacts (download here `recurrent_artifacts.bed`_ or `recurrent_1000G.bed`_).
+* Repetitive regions to filter (download here `centr_and_tel.bed`_ and `all_to_mask.bed`_)
+* Whole genome sequence alignment data in BAM or BED format (see below for details).
 
-To transform paired bam files into bedpe use:
+.. _recurrent_artifacts.bed: http://www.bioinfo.mochsl.org.br/icrmax/recurrent_artifacts.bed
+.. _recurrent_1000G.bed: http://www.bioinfo.mochsl.org.br/icrmax/recurrent_1000G.bed
+.. _centr_and_tel.bed: http://www.bioinfo.mochsl.org.br/icrmax/centr_and_tel.bed
+.. _all_to_mask.bed: http://www.bioinfo.mochsl.org.br/icrmax/all_to_mask.bed
 
-$ bedtools bamtobed –bedpe <input.bam>
+To transform paired bam files into bedpe use: ::
 
-Example input:
+  $ bedtools bamtobed –bedpe <input.bam>
 
-* $1 == read1_chromosome 
-* $2 == read1_start_position 
-* $3 == read1_end_position 
-* $4 == read2_chromosome 
-* $5 == read2_start_position 
-* $6 == read2_end_position 
-* $7 == matepair_id
-* $8 == qual
-* $9 == read1_strand 
-* $10 == read2_strand
+Example bedpe file:
+
+.. image:: https://www.dropbox.com/s/g5twij901kjip8q/inputfile.png?dl=0
+   :scale: 40%
+   :align: center
 
 Overview 
 ==================================
-To run ICRmax in a Linux/Unix environment, simply follow the step-by-step command line after mapping the reads to the reference genome and downloading the necessary files. The pipeline is summarized in the figure below:
-Fig1
+
+To run ICRmax simply follow the Step-by-step command line summarized in the figure below:
+
+.. image:: https://www.dropbox.com/s/giqbt3t38c811z1/Donnard_Fig1.png?dl=0
+   :scale: 40%
+   :align: center
 
 Preparing the WGS reads
 ==================================
