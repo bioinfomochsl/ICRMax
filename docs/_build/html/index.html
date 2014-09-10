@@ -81,7 +81,7 @@
 </div>
 <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>To run ICRmax simply follow the <em class="xref std std-ref">step-by-step-command-line</em> summarized in the figure below:</p>
+<p>To run ICRmax simply follow the <a class="reference internal" href="#step-by-step-command-line"><em>Step-by-step command line</em></a> summarized in the figure below:</p>
 <a class="reference internal image-reference" href="_images/Donnard_Fig1.png"><img alt="_images/Donnard_Fig1.png" class="align-center" src="_images/Donnard_Fig1.png" /></a>
 </div>
 <div class="section" id="preparing-the-wgs-reads">
@@ -94,7 +94,7 @@
 <p>Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have reliable mappings to the same chromosome.</p>
 </div>
 <div class="section" id="step-by-step-command-line">
-<h1>Step-by-step command line<a class="headerlink" href="#step-by-step-command-line" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Step-by-step command line<a class="headerlink" href="#step-by-step-command-line" title="Permalink to this headline">¶</a></h1>
 <p>At this step you should have a paired BED file (bedpe) containing the aligned mate-pair or paired-end reads mapped in different chromosomes with mapping quality greater than or equal to 20, after the reference genome mapping and mapping to alternative reference assemblies. The duplicate reads should also have been removed. For that, samtools rmdup is a good option (see <a class="reference external" href="http://www.htslib.org/man/samtools">http://www.htslib.org/man/samtools</a>)</p>
 <blockquote>
 <div><p><strong>1.</strong> Remove reads mapped in the mitochondrial chromosome and order the bed file:</p>

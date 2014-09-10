@@ -86,6 +86,8 @@ Alignment to alternative reference assemblies is also advised since differences 
 
 Note: For the alternative assemblies, use as input only the reads belonging to mate-pairs that mapped in different chromosomes in the initial reference genome alignment. There is no need to realign the reads that have reliable mappings to the same chromosome.
 
+.. _step-by-step-command-line:
+
 Step-by-step command line
 ==================================
 At this step you should have a paired BED file (bedpe) containing the aligned mate-pair or paired-end reads mapped in different chromosomes with mapping quality greater than or equal to 20, after the reference genome mapping and mapping to alternative reference assemblies. The duplicate reads should also have been removed. For that, samtools rmdup is a good option (see http://www.htslib.org/man/samtools)
@@ -198,7 +200,7 @@ To run circos your input file name should be input_inter.txt or changed in the l
 Input format example:
 
 .. image:: images/inputcircos.png
-   :scale: 40%
+   :scale: 100%
    :align: center
 
 To convert a bed file (final merged version) to the circos input file: ::
