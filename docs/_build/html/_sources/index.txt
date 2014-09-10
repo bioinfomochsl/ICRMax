@@ -49,10 +49,10 @@ All the steps necessary for the ICRmax pipeline can be performed using open-sour
 * Repetitive regions to filter (download here `centr_and_tel.bed`_ and `all_to_mask.bed`_)
 * Whole genome sequence alignment data in BAM or BED format (see below for details).
 
-.. _recurrent_artifacts.bed: http://www.bioinfo.mochsl.org.br/icrmax/recurrent_artifacts.bed
-.. _recurrent_1000G.bed: http://www.bioinfo.mochsl.org.br/icrmax/recurrent_1000G.bed
-.. _centr_and_tel.bed: http://www.bioinfo.mochsl.org.br/icrmax/centr_and_tel.bed
-.. _all_to_mask.bed: http://www.bioinfo.mochsl.org.br/icrmax/all_to_mask.bed
+.. _recurrent_artifacts.bed: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/recurrent_artifacts.bed
+.. _recurrent_1000G.bed: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/recurrent_1000G.bed
+.. _centr_and_tel.bed: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/centr_and_tel.bed
+.. _all_to_mask.bed: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/all_to_mask.bed
 
 To transform paired bam files into bedpe use: ::
 
@@ -167,7 +167,7 @@ As a list of recurrent rearrangements you can use either one of the downloaded f
     $ bedtools intersect –wo –a merged.bed –b recurrent_artifacts.bed | awk ‘{print $1,$4,$8}’ | sort | uniq | awk ‘{print $2,$3}’ | sort | uniq –d | awk ‘{print $1}’ | sort | uniq > recurrent_merged.bed
     $ fgrep –w –v –f recurrent_merged.bed merged.bed > merged_final.bed
 
-.. _merge_bed_reads.pl: http://www.bioinfo.mochsl.org.br/icrmax/merge_bed_reads.pl
+.. _merge_bed_reads.pl: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/merge_bed_reads.pl
 
 Detecting new recurrent events in your samples
 ==================================
@@ -181,7 +181,7 @@ To process this file a simple perl script is used (download here `find_recurrent
   $ awk –F “\t” ‘{print $3}’ tmp_file | sort | uniq –c | awk ‘{if ($1>=2) print $2}’ > recurrent_in_two_or_more_samples
   $ fgrep –w –v –f recurrent_in_two_or_more_samples tmp_file | awk ‘{print $1}’ > final_non_recurrent_list
 
-.. _find_recurrent.pl: http://www.bioinfo.mochsl.org.br/icrmax/find_recurrent.pl
+.. _find_recurrent.pl: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/find_recurrent.pl
 
 Visualizing output in Circos plots
 ==================================
@@ -211,7 +211,7 @@ Circos plot command: ::
 
   $ circus –conf circos.conf
 
-.. _here: http://www.bioinfo.mochsl.org.br/icrmax/circos_conf.tar.bz2
+.. _here: http://www.bioinfo.mochsl.org.br/ICRmax/downloads/circos_conf.tar.bz2
 
 Updates
 ==================================
