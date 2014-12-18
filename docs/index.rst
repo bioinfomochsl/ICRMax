@@ -213,6 +213,17 @@ Circos plot command: ::
 
 .. _here: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/circos_conf.tar.bz2
 
+Parameter
+==================================
+
+Mapping quality: We suggest using only reads mapped with quality greater than or equal to 20 to guarantee better results. Users may also choose to select all reads with unique mapping regardless of quality using the tag NH:i:1 in the bam files.
+
+Clustering distance: For all our data, we used a clustering distance equal to the average insert size in our libraries plus two standard deviation. Users may adapt this clustering parameter if they feel it is not yielding appropriate results in their own samples but it is not recommended.
+
+Minimal read support: We selected only events supported by at least three reads due to our low coverage in all samples (or at least two reads if the orientation is considered). Users may increase this cutoff if necessary for higher coverage, or to get a smaller list of candidate events.
+
+Maximum read support: The maximum read support used in our study was 80, and was set to be approximately 20x the average sequencing coverage. Users may increase or decrease this cutoff adjusting for their samples. This upper cutoff is important to limit the events involving repetitive sequences.
+
 Updates
 ==================================
 We intend to release updates for our recurrent artifact list as we analyze more mate-pair WGS samples (both tumor and normal). 
