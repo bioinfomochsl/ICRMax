@@ -239,11 +239,11 @@ Simulate Rearranged Genomes
 
   **3.** Get the intact chromosome list (download here `get_intact_chr.pl`_) ::
 
-(all_chr should be a simple list of all chromosomes in your original genome)
-
     $ awk '{print $2}' rearrangements_set | sort | uniq > chrs_set
     $ fgrep -w -v -f chrs_set all_chrs > intact_chrs_set
     $ perl get_intact_chr.pl genome.fa intact_chrs_set >> genome_set.fa
+
+  (all_chr should be a simple list of all chromosomes in your original genome)
 
   **4.** Generate simulated mate-pair reads from your rearranged genome with 1% error in color space format (download here `simulaReadsMatePairs.pl`_) ::
 
