@@ -238,7 +238,8 @@ Simulate Rearranged Genomes
     $ perl make_rr_chrom.pl genome.fa rearrangements_set > genome_set.fa
 
   **3.** Get the intact chromosome list (download here `get_intact_chr.pl`_) ::
-  (all_chr should be a simple list of all chromosomes in your original genome)
+
+(all_chr should be a simple list of all chromosomes in your original genome)
 
     $ awk '{print $2}' rearrangements_set | sort | uniq > chrs_set
     $ fgrep -w -v -f chrs_set all_chrs > intact_chrs_set
