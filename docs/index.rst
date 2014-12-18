@@ -224,6 +224,38 @@ Minimal read support: We selected only events supported by at least three reads 
 
 Maximum read support: The maximum read support used in our study was 80, and was set to be approximately 20x the average sequencing coverage. Users may increase or decrease this cutoff adjusting for their samples. This upper cutoff is important to limit the events involving repetitive sequences.
 
+Simulate Rearranged Genomes
+==================================
+     
+  **1.** Run the simulated_rr.pl script  and select the number of breakpoints :: 
+    $ perl simulated_rr.pl centromere_telomereUCSC.txt NN > rearrangements_set
+
+.. _simulated_rr.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/simulated_rr.pl
+.. _centromere_telomereUCSC.txt: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/centromere_telomereUCSC.txt
+     
+    Where NN is the number of breakpoints desired in the output (ex: NN=40 will result in a set of 20 interchromosomal rearrangements)
+     
+  **2.** Create the rearranged genome fasta from your original reference genome ::
+    $ perl make_rr_chrom.pl genome.fa rearrangements_set > genome_set.fa
+
+.. _make_rr_chrom.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/make_rr_chrom.pl
+     
+  **3.** Get the intact chromosome list ::
+    $ awk '{print $2}' rearrangements_set | sort | uniq > chrs_set
+    $ fgrep -w -v -f chrs_set all_chrs > intact_chrs_set
+    $ perl get_intact_chr.pl genome.fa intact_chrs_set >> genome_set.fa
+
+.. _get_intact_chr.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/get_intact_chr.pl
+    (all_chr should be a simple list of all chromosomes in your original genome)
+     
+  **4.** Generate simulated mate-pair reads from your rearranged genome with 1% error in color space format ::
+    $ perl simulaReadsMatePairs.pl genome_set1.fa <Total read number to generate> <Insert size> <read length>
+  In this command line you should specify three numbers, the total of reads you want to generate (based on you calculation for desired coverage), read average insert size (ex: 700) and read length (ex: 50).
+
+.. _simulaReadsMatePairs.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/simulaReadsMatePairs.pl
+     
+  **5.** Follow usual pipeline for mapping and analyzing sequenced reads
+
 Updates
 ==================================
 We intend to release updates for our recurrent artifact list as we analyze more mate-pair WGS samples (both tumor and normal). 
