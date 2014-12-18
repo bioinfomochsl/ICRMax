@@ -229,7 +229,7 @@ Simulate Rearranged Genomes
      
   **1.** Run the simulated_rr.pl script  and select the number of breakpoints :: 
 
-    $ perl simulated_rr.pl centromere_telomereUCSC.txt NN > rearrangements_set
+    $ perl `simulated_rr.pl`_ `centromere_telomereUCSC.txt`_ NN > rearrangements_set
   
   Where NN is the number of breakpoints desired in the output (ex: NN=40 will result in a set of 20 interchromosomal rearrangements)
 
@@ -238,7 +238,7 @@ Simulate Rearranged Genomes
      
   **2.** Create the rearranged genome fasta from your original reference genome ::
 
-    $ perl make_rr_chrom.pl genome.fa rearrangements_set > genome_set.fa
+    $ perl `make_rr_chrom.pl`_ genome.fa rearrangements_set > genome_set.fa
 
 .. _make_rr_chrom.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/make_rr_chrom.pl
      
@@ -246,14 +246,14 @@ Simulate Rearranged Genomes
 
     $ awk '{print $2}' rearrangements_set | sort | uniq > chrs_set
     $ fgrep -w -v -f chrs_set all_chrs > intact_chrs_set
-    $ perl get_intact_chr.pl genome.fa intact_chrs_set >> genome_set.fa
+    $ perl `get_intact_chr.pl`_ genome.fa intact_chrs_set >> genome_set.fa
 
 .. _get_intact_chr.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/get_intact_chr.pl
   (all_chr should be a simple list of all chromosomes in your original genomei
      
   **4.** Generate simulated mate-pair reads from your rearranged genome with 1% error in color space format ::
 
-    $ perl simulaReadsMatePairs.pl genome_set1.fa <Total read number to generate> <Insert size> <read length>
+    $ perl `simulaReadsMatePairs.pl`_ genome_set1.fa <Total read number to generate> <Insert size> <read length>
 
   In this command line you should specify three numbers, the total of reads you want to generate (based on you calculation for desired coverage), read average insert size (ex: 700) and read length (ex: 50).
 
