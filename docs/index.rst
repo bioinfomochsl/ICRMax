@@ -170,7 +170,7 @@ As a list of recurrent rearrangements you can use either one of the downloaded f
 .. _merge_bed_reads.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/merge_bed_reads.pl
 
 Detecting new recurrent events in your samples
-==================================
+==============================================
 Comparison between rearrangements from different samples can be easily done with the bedtools merge command as used above, make sure to allow for a distance similar to the clustering distance used (-d 1000) outside of the read span and alter the cluster names to include sample identification (ex: 14774_4005_1_RT2). This way, after the bedtools merge command using the parameters –nms you should have a single cluster and the different cluster names separated by a semicolon. ::
 
   $ sortBed all_sample_rearrangements.bed | bedtools merge –d 1000 –nms > merged_samples.bed
@@ -213,7 +213,7 @@ Circos plot command: ::
 
 .. _here: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/circos_conf.tar.bz2
 
-Parameter
+Parameters
 ==================================
 
 Mapping quality: We suggest using only reads mapped with quality greater than or equal to 20 to guarantee better results. Users may also choose to select all reads with unique mapping regardless of quality using the tag NH:i:1 in the bam files.
@@ -227,9 +227,9 @@ Maximum read support: The maximum read support used in our study was 80, and was
 Simulate Rearranged Genomes
 ==================================
      
-  **1.** Run the simulated_rr.pl script  and select the number of breakpoints (dowload here `simulated_rr.pl`_ and `centromere_telomereUCSC.txt`_) :: 
+  **1.** Run the simulated_rr.pl script  and select the number of breakpoints (dowload here `simulated_rr.pl`_ and `centromere_telomereUCSC.csv`_) :: 
 
-    $ perl simulated_rr.pl centromere_telomereUCSC.txt NN > rearrangements_set
+    $ perl simulated_rr.pl centromere_telomereUCSC.csv NN > rearrangements_set
   
   Where NN is the number of breakpoints desired in the output (ex: NN=40 will result in a set of 20 interchromosomal rearrangements)
 
