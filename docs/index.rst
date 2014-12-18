@@ -254,7 +254,7 @@ Simulate Rearranged Genomes
   **5.** Follow usual pipeline for mapping and analyzing sequenced reads
 
 .. _simulated_rr.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/simulated_rr.pl
-.. _centromere_telomereUCSC.txt: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/centromere_telomereUCSC.txt
+.. _centromere_telomereUCSC.csv: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/centromere_telomereUCSC.csv
 .. _make_rr_chrom.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/make_rr_chrom.pl
 .. _get_intact_chr.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/get_intact_chr.pl
 .. _simulaReadsMatePairs.pl: http://www.bioinfo.mochsl.org.br/ICRmax-downloads/downloads/simulaReadsMatePairs.pl
