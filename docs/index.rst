@@ -34,7 +34,7 @@ The cost reduction resulting from this approach creates an opportunity to implem
 
 Requirements
 ==================================
-All the steps necessary for the ICRmax pipeline can be performed using open-source software/pipelines and publicly available data.
+All the steps necessary for the ICRmax pipeline can be performed using open-source software/pipelines and publicly available data. The pipeline was executed in our servers running Ubuntu 14.04.1 LTS. 
 
 **Software and pipelines:**
 
