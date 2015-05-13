@@ -285,11 +285,9 @@ Pedro Galante, pgalante at mochsl.org.br
 
 References
 ==================================
-ICRmax: an optimized approach to detect tumor-specific InterChromosomal Rearrangements for Clinical Application
+Donnard ER, Carpinetti P, Navarro FCP, Perez RO, Habr-Gama A, Parmigiani RB, Camargo AA and Galante PAF, ICRmax: An optimized approach to detect tumor-specific interchromosomal rearrangements for clinical application, Genomics, Volume 105, Issues 5–6, May 2015, Pages 265-272, ISSN 0888-7543, `doi:10.1016/j.ygeno.2015.01.009`_
 
-Donnard ER, Carpinetti P, Navarro FCP, Perez RO, Habr-Gama A, Parmigiani RB, Camargo AA and Galante PAF
-
-[under review]
+.. _doi:10.1016/j.ygeno.2015.01.009: buga
 
 Structural Variations in Rectal Cancer as Biomarkers for Detecting Residual Disease after Neoadjuvant Treatment
 
