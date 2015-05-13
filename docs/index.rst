@@ -287,7 +287,7 @@ References
 ==================================
 Donnard ER, Carpinetti P, Navarro FCP, Perez RO, Habr-Gama A, Parmigiani RB, Camargo AA and Galante PAF, ICRmax: An optimized approach to detect tumor-specific interchromosomal rearrangements for clinical application, Genomics, Volume 105, Issues 5–6, May 2015, Pages 265-272, ISSN 0888-7543, `doi:10.1016/j.ygeno.2015.01.009`_
 
-.. _doi:10.1016/j.ygeno.2015.01.009: buga
+.. _doi:10.1016/j.ygeno.2015.01.009: http://www.sciencedirect.com/science/article/pii/S0888754315000270
 
 Structural Variations in Rectal Cancer as Biomarkers for Detecting Residual Disease after Neoadjuvant Treatment
 
